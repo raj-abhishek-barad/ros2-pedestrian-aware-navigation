@@ -80,7 +80,7 @@ class RVizOverlayNode(Node):
     def _risk_cb(self, msg: String) -> None:
         try:
             data = json.loads(msg.data)
-            self._risk_data = {p["id"]: p for p in data.get("per_pedestrian", [])}
+            self._risk_data = {p["id"]: p for p in data.get("pedestrians", [])}
         except Exception:
             pass
 
@@ -98,9 +98,8 @@ class RVizOverlayNode(Node):
 
         for tid, track in self._track_data.items():
             seen_ids.add(tid)
-            pos = track.get("position", {})
-            x = float(pos.get("x", 0.0))
-            y = float(pos.get("y", 0.0))
+            x = float(track.get("x", 0.0))
+            y = float(track.get("y", 0.0))
 
             # Build label text
             lines = [f"ID:{tid}"]
