@@ -1,37 +1,33 @@
-<?xml version="1.0"?>
-<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<?xml-model
+href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"
+?>
 <package format="3">
-  <name>pedestrian_aware_tb4</name>
-  <version>0.2.0</version>
-  <description>
-    Pedestrian-aware safety package for ROS 2 Jazzy.
-    Provides IMM tracking (CV / CTRV-EKF / Stop), HMM intent estimation,
-    intent-conditioned risk filtering, and velocity gating.
-  </description>
-
-  <maintainer email="you@example.com">Your Name</maintainer>
-  <license>MIT</license>
-
-  <!-- Build tool -->
-  <buildtool_depend>ament_python</buildtool_depend>
-
-  <!-- Runtime ROS dependencies -->
-  <exec_depend>rclpy</exec_depend>
-  <exec_depend>std_msgs</exec_depend>
-  <exec_depend>geometry_msgs</exec_depend>
-  <exec_depend>nav_msgs</exec_depend>
-  <exec_depend>visualization_msgs</exec_depend>
-
-  <!-- Python library dependencies (already present in Jazzy base image) -->
-  <exec_depend>python3-numpy</exec_depend>
-
-  <!-- Test dependencies -->
-  <test_depend>ament_copyright</test_depend>
-  <test_depend>ament_flake8</test_depend>
-  <test_depend>ament_pep257</test_depend>
-  <test_depend>python3-pytest</test_depend>
-
-  <export>
-    <build_type>ament_python</build_type>
-  </export>
+<name>pedestrian_aware_tb4</name>
+<version>0.2.0</version>
+<description>
+Pedestrian-aware safety package for ROS 2 Jazzy. Provides IMM tracking (CV / CTRV-EKF / Stop), HMM intent estimation, intent-conditioned risk filtering, and velocity gating.
+</description>
+<maintainer email="you@example.com">Your Name</maintainer>
+<license>MIT</license>
+<!-- Build tool -->
+<buildtool_depend>ament_python</buildtool_depend>
+<!-- Runtime ROS dependencies -->
+<exec_depend>rclpy</exec_depend>
+<exec_depend>std_msgs</exec_depend>
+<exec_depend>geometry_msgs</exec_depend>
+<exec_depend>nav_msgs</exec_depend>
+<exec_depend>visualization_msgs</exec_depend>
+<exec_depend>tf2_ros</exec_depend>
+<!--
+ Python library dependencies (already present in Jazzy base image) 
+-->
+<exec_depend>python3-numpy</exec_depend>
+<!-- Test dependencies -->
+<test_depend>ament_copyright</test_depend>
+<test_depend>ament_flake8</test_depend>
+<test_depend>ament_pep257</test_depend>
+<test_depend>python3-pytest</test_depend>
+<export>
+<build_type>ament_python</build_type>
+</export>
 </package>
