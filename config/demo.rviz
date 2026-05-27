@@ -41,6 +41,31 @@ Visualization Manager:
       Reference Frame: <Fixed Frame>
       Value: true
 
+
+    - Class: rviz_default_plugins/Marker
+      Enabled: true
+      Name: Robot Body
+      Topic:
+        Depth: 10
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /robot_marker
+      Value: true
+
+    - Class: rviz_default_plugins/Marker
+      Enabled: true
+      Name: Robot Heading
+      Topic:
+        Depth: 10
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /robot_heading
+      Value: true
+
     - Class: rviz_default_plugins/Axes
       Enabled: true
       Length: 0.5
