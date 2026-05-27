@@ -80,7 +80,7 @@ class RVizOverlayNode(Node):
     def _risk_cb(self, msg: String) -> None:
         try:
             data = json.loads(msg.data)
-            self._risk_data = {p["id"]: p for p in data.get("pedestrians", [])}
+            self._risk_data = {p["id"]: p for p in data.get("per_pedestrian", [])}
         except Exception:
             pass
 
