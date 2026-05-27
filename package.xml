@@ -7,7 +7,7 @@ href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://w
 <description>
 Pedestrian-aware safety package for ROS 2 Jazzy. Provides IMM tracking (CV / CTRV-EKF / Stop), HMM intent estimation, intent-conditioned risk filtering, and velocity gating.
 </description>
-<maintainer email="you@example.com">Your Name</maintainer>
+<maintainer email="abhishekbarad403@gmail.com">Abhishek Barad</maintainer>
 <license>MIT</license>
 <!-- Build tool -->
 <buildtool_depend>ament_python</buildtool_depend>
