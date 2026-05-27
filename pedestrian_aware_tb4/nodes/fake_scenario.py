@@ -30,7 +30,6 @@ from typing import List, Tuple
 
 import rclpy
 from geometry_msgs.msg import Twist
-from nav_msgs.msg import Odometry
 from rclpy.node import Node
 from rclpy.qos import (
     DurabilityPolicy,
@@ -102,9 +101,7 @@ class FakeScenarioNode(Node):
         self._det_pub = self.create_publisher(
             String, "/pedestrian_detections", _RELIABLE_QOS
         )
-        self._odom_pub = self.create_publisher(
-            Odometry, "/odom", _RELIABLE_QOS
-        )
+        # /odom is published by robot_simulator, not here.
         self._cmd_pub = self.create_publisher(
             Twist, "/cmd_vel_input", _RELIABLE_QOS
         )
@@ -137,14 +134,6 @@ class FakeScenarioNode(Node):
             "detections": [{"x": round(px, 4), "y": round(py, 4), "confidence": 0.95}]
         })
         self._det_pub.publish(det_msg)
-
-        # ---- Odometry (robot stationary at origin) ---------------------
-        odom = Odometry()
-        odom.header.stamp = self.get_clock().now().to_msg()
-        odom.header.frame_id = "odom"
-        odom.child_frame_id = "base_link"
-        odom.pose.pose.orientation.w = 1.0   # facing +x
-        # self._odom_pub.publish(odom)
 
         # ---- Constant forward drive command ----------------------------
         cmd = Twist()
