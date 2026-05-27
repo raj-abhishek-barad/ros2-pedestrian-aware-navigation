@@ -1,0 +1,103 @@
+#!/usr/bin/env python3
+
+import math
+import rclpy
+from rclpy.node import Node
+from geometry_msgs.msg import Twist
+from nav_msgs.msg import Odometry
+from visualization_msgs.msg import Marker
+from std_msgs.msg import ColorRGBA
+
+
+class RobotSimulator(Node):
+    def __init__(self):
+        super().__init__("robot_simulator")
+
+        self.x = -4.0
+        self.y = 2.2
+        self.yaw = 0.0
+
+        self.x_min = -4.0
+        self.x_max = 4.0
+        self.direction = 1.0
+
+        self.v = 0.0
+        self.w = 0.0
+        self.last_time = self.get_clock().now()
+
+        self.cmd_sub = self.create_subscription(Twist, "/cmd_vel", self.cmd_callback, 10)
+        self.odom_pub = self.create_publisher(Odometry, "/odom", 10)
+        self.marker_pub = self.create_publisher(Marker, "/robot_marker", 10)
+
+        self.timer = self.create_timer(0.05, self.step)
+        self.get_logger().info("Pure ROS2 robot simulator started.")
+
+    def cmd_callback(self, msg):
+        self.v = msg.linear.x
+        self.w = msg.angular.z
+
+    def step(self):
+        now = self.get_clock().now()
+        dt = (now - self.last_time).nanoseconds * 1e-9
+        self.last_time = now
+
+        if self.x > self.x_max:
+            self.direction = -1.0
+            self.yaw = math.pi
+
+        if self.x < self.x_min:
+            self.direction = 1.0
+            self.yaw = 0.0
+
+        speed = abs(self.v)
+
+        self.x += speed * math.cos(self.yaw) * dt
+        self.y += speed * math.sin(self.yaw) * dt
+        self.yaw += self.w * dt
+
+        self.publish_odom(now)
+        self.publish_marker(now)
+
+    def publish_odom(self, now):
+        odom = Odometry()
+        odom.header.stamp = now.to_msg()
+        odom.header.frame_id = "odom"
+        odom.child_frame_id = "base_link"
+        odom.pose.pose.position.x = self.x
+        odom.pose.pose.position.y = self.y
+        odom.pose.pose.orientation.z = math.sin(self.yaw / 2.0)
+        odom.pose.pose.orientation.w = math.cos(self.yaw / 2.0)
+        odom.twist.twist.linear.x = self.v
+        odom.twist.twist.angular.z = self.w
+        self.odom_pub.publish(odom)
+
+    def publish_marker(self, now):
+        m = Marker()
+        m.header.stamp = now.to_msg()
+        m.header.frame_id = "odom"
+        m.ns = "robot"
+        m.id = 0
+        m.type = Marker.CYLINDER
+        m.action = Marker.ADD
+        m.pose.position.x = self.x
+        m.pose.position.y = self.y
+        m.pose.position.z = 0.25
+        m.pose.orientation.z = math.sin(self.yaw / 2.0)
+        m.pose.orientation.w = math.cos(self.yaw / 2.0)
+        m.scale.x = 0.6
+        m.scale.y = 0.6
+        m.scale.z = 0.5
+        m.color = ColorRGBA(r=0.1, g=0.4, b=1.0, a=0.9)
+        self.marker_pub.publish(m)
+
+
+def main(args=None):
+    rclpy.init(args=args)
+    node = RobotSimulator()
+    rclpy.spin(node)
+    node.destroy_node()
+    rclpy.shutdown()
+
+
+if __name__ == "__main__":
+    main()

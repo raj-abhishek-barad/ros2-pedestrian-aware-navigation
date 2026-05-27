@@ -1,0 +1,48 @@
+# pedestrian_aware_tb4 — runtime parameters
+# Loaded by both nodes via pedestrian_safety.launch.py
+# Override any value at launch: ros2 launch ... imm_sigma_r:=0.10
+#
+# ──────────────────────────────────────────────────────────────────────────
+# pedestrian_pipeline  (IMM tracker + intent estimator)
+# ──────────────────────────────────────────────────────────────────────────
+pedestrian_pipeline:
+  ros__parameters:
+
+    # IMM tracker
+    imm_max_distance: 1.5     # [m]   max association distance (greedy NN)
+    imm_max_misses:   5       # consecutive missed frames before track deletion
+    imm_min_hits:     2       # frames required before a track is confirmed
+    imm_sigma_a:      0.5     # [m/s²] acceleration noise std (CV / Stop models)
+    imm_sigma_r:      0.15    # [m]   position measurement noise std
+    imm_sigma_yaw_dd: 0.3     # [rad/s²] yaw-rate acceleration noise std (CTRV)
+
+    # Intent estimator
+    intent_history:   15      # HMM sliding-window length (frames)
+
+    # Frame IDs
+    odom_frame: "odom"
+
+# ──────────────────────────────────────────────────────────────────────────
+# risk_filter  (20 Hz velocity gating)
+# ──────────────────────────────────────────────────────────────────────────
+risk_filter:
+  ros__parameters:
+
+    control_hz: 20.0          # [Hz]  timer frequency
+
+    # Risk model geometry
+    robot_radius:   0.25      # [m]
+    ped_radius:     0.35      # [m]
+    min_clearance:  0.50      # [m]   clearance below which hard-stop triggers
+    max_ttc:        2.0       # [s]   TTC below which risk rises
+
+    # Risk score weights
+    risk_weight_clearance: 2.0
+    risk_weight_ttc:       1.0
+
+    # Intent-conditioned prediction
+    prediction_horizon: 1.0   # [s]
+
+    # Speed attenuation thresholds (risk score units)
+    risk_attenuation_onset: 3.0   # score above which speed starts reducing
+    risk_attenuation_full:  8.0   # score above which speed = 0
